@@ -1,0 +1,10 @@
+# Copy to config/metros.yaml (or metros.local.yaml) to set the cities you want to work in.
+# "preferred" metros get the full location score and become the default preferred cities;
+# "nearby" metros get a smaller boost. Each metro lists the place names that count as it.
+# Without this file the built-in example metros (Madison, Chicago, Oklahoma City, Dallas) are used.
+preferred:
+  "Seattle, WA": [seattle, bellevue, redmond, kirkland, bothell, renton, tukwila]
+  "Austin, TX": [austin, round rock, cedar park, pflugerville, georgetown, san marcos]
+nearby:
+  "Portland, OR": [portland, beaverton, hillsboro, lake oswego]
+  "San Antonio, TX": [san antonio, new braunfels]

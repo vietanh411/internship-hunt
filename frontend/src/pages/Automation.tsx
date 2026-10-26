@@ -343,7 +343,7 @@ function SettingsForm({ settings }: { settings: AutomationSettings }) {
       <Card title="Targets" subtitle="Where and what to look for.">
         <div className="grid gap-5 lg:grid-cols-2">
           <Field label="Preferred cities" htmlFor="cities" hint="Postings in these metros get the full location score.">
-            <TagInput id="cities" value={draft.preferred_cities ?? []} onChange={(v) => up('preferred_cities', v)} placeholder="e.g. Madison, WI" />
+            <TagInput id="cities" value={draft.preferred_cities ?? []} onChange={(v) => up('preferred_cities', v)} placeholder="e.g. Austin, TX" />
           </Field>
           <Field label="Target roles" htmlFor="roles" hint="Role families used to judge relevance.">
             <TagInput id="roles" value={draft.target_roles ?? []} onChange={(v) => up('target_roles', v)} placeholder="e.g. Data Science Intern" />

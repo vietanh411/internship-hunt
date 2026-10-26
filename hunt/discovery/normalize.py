@@ -201,6 +201,7 @@ NON_US = re.compile(
     r"australia|sydney|mexico|brazil|poland|spain|italy|switzerland|zurich|israel|tel aviv|sweden|"
     r"philippines|vietnam|romania|czech|portugal|argentina|colombia|costa rica|emea|apac|latam)\b", re.I)
 
+# Built-in example metros (the author's). config/metros.yaml replaces them; see config/metros.example.yaml.
 METROS: dict[str, list[str]] = {
     "Madison, WI": ["madison", "middleton", "verona", "fitchburg", "sun prairie", "monona", "waunakee", "deforest"],
     "Chicago, IL": ["chicago", "evanston", "naperville", "schaumburg", "oak brook", "oakbrook", "deerfield",
@@ -223,6 +224,23 @@ NEARBY_METROS: dict[str, list[str]] = {
     "Tulsa, OK": ["tulsa", "broken arrow", "owasso", "bartlesville"],
     "Rockford, IL": ["rockford", "janesville", "beloit"],
 }
+
+
+def _load_metros() -> None:
+    from hunt.config import get_settings
+    import yaml
+    d = get_settings().config_dir
+    for name in ("metros.local.yaml", "metros.yaml"):
+        if (d / name).exists():
+            data = yaml.safe_load((d / name).read_text(encoding="utf-8")) or {}
+            METROS.clear()
+            METROS.update(data.get("preferred") or {})
+            NEARBY_METROS.clear()
+            NEARBY_METROS.update(data.get("nearby") or {})
+            return
+
+
+_load_metros()
 
 
 def is_remote(loc: str) -> bool:

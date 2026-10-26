@@ -13,5 +13,5 @@ $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoi
   -ExecutionTimeLimit ([TimeSpan]::Zero) -RestartCount 3 -RestartInterval (New-TimeSpan -Minutes 1) `
   -MultipleInstances IgnoreNew
 Register-ScheduledTask -TaskName "Summer2027HuntDashboard" -Action $action -Trigger $trigger -Settings $settings `
-  -Description "Viet Anh's Summer 2027 Hunt dashboard at http://localhost:8000 (starts at sign-in)" -Force | Out-Null
+  -Description "Internship Hunt dashboard at http://localhost:8000 (starts at sign-in)" -Force | Out-Null
 Write-Host "Registered task 'Summer2027HuntDashboard' (starts at sign-in)."

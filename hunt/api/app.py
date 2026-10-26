@@ -87,7 +87,7 @@ async def lifespan(app: FastAPI):
 
 def create_app(start_background: bool = True) -> FastAPI:
     s = get_settings()
-    app = FastAPI(title="Viet Anh's Summer 2027 Hunt", version="1.0", lifespan=lifespan if start_background else None)
+    app = FastAPI(title="Internship Hunt", version="1.0", lifespan=lifespan if start_background else None)
 
     @app.middleware("http")
     async def auth_mw(request: Request, call_next):
@@ -304,14 +304,14 @@ def _register_routes(app: FastAPI) -> None:  # noqa: C901
         j = _job(session, job_id)
         if not j.resume_versions:
             raise HTTPException(404, "No tailored resume yet")
-        return _pdf(session.get(Artifact, j.resume_versions[-1].artifact_id), "Resume_VietAnhNguyen.pdf", inline)
+        return _pdf(session.get(Artifact, j.resume_versions[-1].artifact_id), None, inline)
 
     @app.get("/api/resumes/{version_id}/pdf")
     def resume_pdf(version_id: str, inline: bool = False, session: Session = Depends(db)):
         rv = session.scalar(select(ResumeVersion).where(ResumeVersion.version_id == version_id))
         if rv is None:
             raise HTTPException(404)
-        return _pdf(session.get(Artifact, rv.artifact_id), "Resume_VietAnhNguyen.pdf", inline)
+        return _pdf(session.get(Artifact, rv.artifact_id), None, inline)
 
     @app.get("/api/jobs/{job_id}/cover-letter")
     def cover_letter(job_id: int, inline: bool = False, session: Session = Depends(db)):
@@ -807,7 +807,7 @@ def _register_routes(app: FastAPI) -> None:  # noqa: C901
             for rv in session.scalars(select(ResumeVersion)).all():
                 a = session.get(Artifact, rv.artifact_id)
                 j = session.get(Job, rv.job_id)
-                z.writestr(f"resumes/{re.sub(r'[^A-Za-z0-9]+', '-', j.company)}/{rv.version_id}/Resume_VietAnhNguyen.pdf", a.content)
+                z.writestr(f"resumes/{re.sub(r'[^A-Za-z0-9]+', '-', j.company)}/{rv.version_id}/{a.filename}", a.content)
         audit(session, "user", "export_data")
         session.commit()
         return Response(buf.getvalue(), media_type="application/zip",

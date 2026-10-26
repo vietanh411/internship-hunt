@@ -33,7 +33,7 @@ def ats_check(pdf: bytes, resume: dict, keywords: list[str] | None = None, one_p
     if one_page:
         add("one_page", len(reader.pages) == 1, f"{len(reader.pages)} page(s)")
     if filename is not None:
-        add("filename", filename == "Resume_VietAnhNguyen.pdf", filename)
+        add("filename", bool(re.fullmatch(r"Resume_[A-Za-z0-9]+\.pdf", filename)), filename)
     add("selectable_text", len(nt) > 500, f"{len(nt)} characters extracted")
     add("no_garbled_glyphs", "(cid:" not in text and "�" not in text)
     b = resume["basics"]

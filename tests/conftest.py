@@ -13,6 +13,7 @@ def db(tmp_path, monkeypatch):
     """Fresh SQLite database with the schema, profile and master resume loaded."""
     monkeypatch.setenv("HUNT_DATABASE_URL", f"sqlite:///{(tmp_path / 'test.db').as_posix()}")
     monkeypatch.setenv("HUNT_DATA_DIR", str(tmp_path / "data"))
+    monkeypatch.setenv("HUNT_CONFIG_DIR", str(ROOT / "tests" / "fixtures"))  # tests use the fixture applicant
     monkeypatch.setenv("HUNT_SCHEDULER_ENABLED", "false")
     monkeypatch.setenv("HUNT_SECRET_KEY", "")
     # never inherit live settings from the developer's .env

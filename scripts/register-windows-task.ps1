@@ -12,5 +12,5 @@ $trigger = New-ScheduledTaskTrigger -Daily -At 9:00AM
 $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -WakeToRun -AllowStartIfOnBatteries `
   -DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Hours 3)
 Register-ScheduledTask -TaskName "Summer2027Hunt" -Action $action -Trigger $trigger -Settings $settings `
-  -Description "Viet Anh's Summer 2027 internship pipeline (daily 9:00)" -Force | Out-Null
+  -Description "Internship Hunt pipeline (daily 9:00)" -Force | Out-Null
 Write-Host "Registered task 'Summer2027Hunt' (daily 9:00 AM)."

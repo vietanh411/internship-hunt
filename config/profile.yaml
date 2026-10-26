@@ -1,17 +1,20 @@
-# Initial applicant profile, imported into the database on first run and then
-# edited from the dashboard (Profile & Onboarding). Fields set to null are
-# collected during onboarding. Values here are facts used verbatim in
-# applications; never put anything here that is not true.
+# Your applicant profile. It is imported into the database on first run (`hunt init`)
+# and edited from the dashboard afterwards (Profile & Onboarding). Fields left null
+# are collected during onboarding. Values here are used verbatim in applications:
+# never put anything here that is not true.
+#
+# Keep your real details out of git: copy this file to config/profile.local.yaml
+# (git-ignored) and edit that copy. It takes precedence when present.
 identity:
-  first_name: Viet Anh
-  last_name: Nguyen
-  preferred_name: Viet Anh
+  first_name: Jane
+  last_name: Doe
+  preferred_name: null
   pronouns: null
 
 contact:
-  email: applicant@example.com
-  phone: (555) 010-0100       # stored encrypted when HUNT_SECRET_KEY is set
-  linkedin_url: https://www.linkedin.com/in/viet-anh-nguyen-898238343
+  email: jane.doe@example.com
+  phone: null                  # stored encrypted when HUNT_SECRET_KEY is set
+  linkedin_url: null
   github_url: null
   portfolio_url: null
   address_line1: null          # encrypted
@@ -21,37 +24,40 @@ contact:
   country: United States
 
 education:
-  current_school: University of Wisconsin–Madison
-  current_degree: Master of Science in Data Science
-  current_major: Data Science
-  degree_level: Master's
-  expected_graduation: December 2027
-  expected_graduation_date: 2027-12-15
-  current_gpa: null            # UW–Madison GPA, if you want it shared
-  undergrad_school: University of Oklahoma
-  undergrad_degree: Bachelor of Science in Computer Science
-  undergrad_gpa: "3.85"
-  undergrad_graduation: May 2026
+  current_school: Example State University
+  current_degree: Bachelor of Science in Computer Science
+  current_major: Computer Science
+  degree_level: Bachelor's     # Bachelor's / Master's / PhD
+  expected_graduation: May 2028
+  expected_graduation_date: 2028-05-15
+  current_gpa: null
+  undergrad_school: null       # if your current degree is a graduate one
+  undergrad_degree: null
+  undergrad_gpa: null
+  undergrad_graduation: null
 
+# Answered honestly in every application, and used to screen out postings you
+# are not eligible for. Students on F-1 visas: CPT/OPT authorize internships,
+# but most forms still count them as needing sponsorship.
 work_authorization:
-  visa_status: F-1
-  us_citizen: false
-  permanent_resident: false
-  authorized_to_work_us: true            # via CPT / OPT
-  requires_sponsorship_now_or_future: true
-  cpt_eligible: true
-  opt_eligible: true
-  will_use_opt: true
+  visa_status: null            # e.g. US citizen, Permanent resident, F-1
+  us_citizen: null
+  permanent_resident: null
+  authorized_to_work_us: null
+  requires_sponsorship_now_or_future: null
+  cpt_eligible: null
+  opt_eligible: null
+  will_use_opt: null
   security_clearance: false
   # Must be confirmed in the dashboard before any automatic submission.
   confirmed: false
 
 availability:
   internship_term: Summer 2027
-  earliest_start_date: 2027-05-30
+  earliest_start_date: null
   latest_end_date: null
   willing_to_relocate: true
-  preferred_locations: [Madison, WI, Chicago, IL, Oklahoma City, OK, Dallas, TX]
+  preferred_locations: []
   open_to_remote: true
 
 preferences:
@@ -74,6 +80,6 @@ eeo:
   disability_status: null
 
 attestations:
-  is_over_18: null              # confirm in onboarding
+  is_over_18: null
   has_relatives_at_employer: null
   subject_to_noncompete: null

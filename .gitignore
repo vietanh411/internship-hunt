@@ -14,3 +14,4 @@ config/*.local.yaml
 *.db
 *.db-shm
 *.db-wal
+config/metros.yaml

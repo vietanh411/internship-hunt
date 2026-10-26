@@ -602,7 +602,7 @@ def _wd_should_fill(f, a) -> bool:
 
 
 def _wd_clear_needed(f, ctx) -> bool:
-    """A middle name Workday made up from 'Viet Anh' (your first name is two words), or a
+    """A middle name Workday made up from a two-word first name (e.g. 'Mary Ann'), or a
     phone number put in the phone-extension box."""
     from hunt.apply.answers import norm
     lab = norm(f.label)

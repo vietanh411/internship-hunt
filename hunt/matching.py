@@ -184,8 +184,15 @@ UNDERGRAD_TITLE = re.compile(r"\bundergrad(?:uate)?s?\b", re.I)
 GRAD_IN_TITLE = re.compile(r"(?<!under)\bgrad(?:uate)?s?\b|\bmaster'?s?\b|\bm\.?s\.?\b|\bmba\b|\bph\.?d\b|\bgraduate\b", re.I)
 
 
+RELATED_FIELDS = {"computer science", "data science", "statistics", "analytics", "engineering", "math", "mathematics"}
+
+
+def is_grad_student(app: Applicant) -> bool:
+    return bool(app.degree_levels & {"masters", "phd"})
+
+
 def undergrad_only(title: str, text: str) -> bool:
-    """An internship only for undergraduates (you'll be an MS student): the title says
+    """An internship only for undergraduates (matters to Master's/PhD applicants): the title says
     'Undergraduate' without graduate/Master's students, or the description is written
     for undergraduates and never mentions Master's or graduate students."""
     t = re.sub(r"\bundergrad\w*", " ", title or "", flags=re.I)
@@ -203,21 +210,23 @@ def education_fit(text: str, degrees_hint: list[str], app: Applicant, title: str
         gates.append("phd_required")
         gaps.append("Posting targets PhD students")
         score = 0.1
-    elif undergrad_only(title, t):
+    elif is_grad_student(app) and undergrad_only(title, t):
         gates.append("undergrad_only")
-        gaps.append("Undergraduate-only internship (you will be an MS student)")
+        gaps.append("Undergraduate-only internship (you are a graduate student)")
         score = 0.1
-    elif degrees_hint and "Master's" not in degrees_hint and "Bachelor's" in degrees_hint or BACHELOR_ONLY.search(t):
-        gaps.append("Posting appears aimed at undergraduates (you will be an MS student)")
+    elif is_grad_student(app) and (degrees_hint and "Master's" not in degrees_hint and "Bachelor's" in degrees_hint
+                                   or BACHELOR_ONLY.search(t)):
+        gaps.append("Posting appears aimed at undergraduates (you are a graduate student)")
         score = 0.6
-    elif MASTERS.search(t) or "Master's" in (degrees_hint or []):
-        strengths.append("Graduate (MS) students are explicitly in scope")
+    elif is_grad_student(app) and (MASTERS.search(t) or "Master's" in (degrees_hint or [])):
+        strengths.append("Graduate students are explicitly in scope")
     fields_req = {m.group(1).lower() for m in FIELD_RE.finditer(t)}
     if fields_req:
-        ok = {"computer science", "data science", "statistics", "analytics", "quantitative", "stem",
-              "related field", "related technical field", "engineering", "math", "mathematics"}
+        ok = {"quantitative", "stem", "related field", "related technical field"} | app.fields
+        if app.fields & RELATED_FIELDS:
+            ok |= RELATED_FIELDS
         if fields_req & ok:
-            strengths.append("Degree fields match (BS Computer Science, MS Data Science)")
+            strengths.append(f"Degree fields match ({', '.join(sorted(f.title() for f in app.fields if f))})")
         else:
             score *= 0.75
             gaps.append(f"Preferred fields: {', '.join(sorted(fields_req))}")

@@ -55,8 +55,9 @@ from hunt.workflow import notify, run_log, set_status
 
 log = logging.getLogger(__name__)
 
-RESUME_FILENAME = "Resume_VietAnhNguyen.pdf"
-COVER_FILENAME = "CoverLetter_VietAnhNguyen.pdf"
+def doc_filename(kind: str, name: str) -> str:
+    """Resume_JaneDoe.pdf / CoverLetter_JaneDoe.pdf, named after the applicant."""
+    return f"{kind}_{re.sub(r'[^A-Za-z0-9]+', '', name or 'Applicant')}.pdf"
 
 
 class Cancelled(Exception):
@@ -600,7 +601,7 @@ def stage_matching(rc: RunContext) -> dict:
         gates = (job.score_explanation or {}).get("gates", [])
         app = job.application
         if "undergrad_only" in gates and not (app and (app.date_applied or "mark Submitted" in (job.next_action or ""))):
-            # you'll be an MS student, so undergraduate-only internships are removed like ineligible ones
+            # graduate applicants: undergraduate-only internships are removed like ineligible ones
             set_status(session, job, JobStatus.INELIGIBLE, "Undergraduate-only internship", run_id=rc.run.id,
                        next_action="Not applicable: undergraduate students only")
             stats["undergrad_only"] += 1
@@ -629,7 +630,8 @@ def tailor_job(rc: RunContext, job: Job) -> ResumeVersion:
     session.commit()  # LLM / form fetches below must not run inside a write transaction
     res = tailor_resume(rc.master, rc.profile, job, rc.settings, rc.llm)
     pdf, fitted, notes = render_fitted(res.resume, rc.settings.get("resume", {}).get("one_page", True))
-    check = ats_check(pdf, fitted, res.matched_keywords, rc.settings.get("resume", {}).get("one_page", True), RESUME_FILENAME)
+    resume_name = doc_filename("Resume", rc.master["basics"]["name"])
+    check = ats_check(pdf, fitted, res.matched_keywords, rc.settings.get("resume", {}).get("one_page", True), resume_name)
     policy = rc.settings.get("resume", {}).get("cover_letters", "when_required")
     form = None
     if adapters.platform_of(job) in ("greenhouse", "mock") and policy != "never":
@@ -644,7 +646,7 @@ def tailor_job(rc: RunContext, job: Job) -> ResumeVersion:
     # --- database writes ---
     n = session.scalar(select(func.count(ResumeVersion.id)).where(ResumeVersion.job_id == job.id)) or 0
     version_id = f"rv-{job.uid}-{n + 1:03d}"
-    art = save_artifact(session, job, "resume", RESUME_FILENAME, pdf, "application/pdf", version=version_id)
+    art = save_artifact(session, job, "resume", resume_name, pdf, "application/pdf", version=version_id)
     changes = res.changes + [{"type": "layout", "detail": n_} for n_ in notes]
     if cover is not None:
         changes.append({"type": "cover_letter", "detail": f"Generated ({'LLM' if cover[1].get('llm_used') else 'template'}), fact-checked"})
@@ -655,7 +657,7 @@ def tailor_job(rc: RunContext, job: Job) -> ResumeVersion:
     session.add(rv)
     session.flush()
     if cover is not None:
-        cl = save_artifact(session, job, "cover_letter", COVER_FILENAME, cover[0], "application/pdf", version=version_id)
+        cl = save_artifact(session, job, "cover_letter", doc_filename("CoverLetter", rc.master["basics"]["name"]), cover[0], "application/pdf", version=version_id)
         ensure_application(session, job).cover_letter_artifact_id = cl.id
     return rv
 

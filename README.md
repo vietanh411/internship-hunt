@@ -1,161 +1,126 @@
-# Viet Anh's Summer 2027 Hunt
+# Internship Hunt
 
-An internship pipeline that runs every day at **9:00 AM America/Chicago**:
+A personal pipeline that finds internship postings the day they go up, checks whether you're eligible, writes a tailored resume for each one, and fills the application in for you. You review every page and click submit yourself.
 
-**Discover → Verify → Deduplicate → Eligibility (CPT/OPT) → Match → Tailor resume → Prepare/submit application → Confirm → Report**
+**Discover → Verify → Deduplicate → Eligibility → Match → Tailor resume → Fill application → Confirm → Report**
 
-with a dashboard, the **Summer 2027 Internship Command Center**.
+It runs every morning and comes with a local dashboard, the **Internship Command Center**.
+
+> I built this with [Claude Code](https://claude.com/claude-code) for my own Summer 2027 internship search, and used it every day of that search. On its busiest day it helped me submit 44 applications.
+> — Viet Anh Nguyen ([@vietanh411](https://github.com/vietanh411))
 
 ---
 
-## Quick start (this PC)
+## Highlights
 
-```powershell
-cd D:\claude\internship-hunt
-.\.venv\Scripts\python.exe -m hunt init          # migrate DB, load profile + master resume + seed boards
-.\.venv\Scripts\python.exe -m hunt serve         # dashboard at http://127.0.0.1:8000 (+ daily 9:00 scheduler)
+- **Finds jobs at the source.** Polls company job boards directly through the public APIs of Greenhouse, Lever, Ashby, SmartRecruiters and Workday, plus the community Summer 2027 internship lists. Fresh postings (today/yesterday) on quick-to-finish platforms go to the top of the queue.
+- **Eligibility from the actual posting text.** Sentence-level rules for work authorization (citizenship, clearance, sponsorship, CPT/OPT), degree level and graduation window. Every verdict stores the sentence it was based on.
+- **Tailored resumes that stay true.** Each resume is reordered and reworded toward the posting, then passed through a *fact guard* that rejects any number, tool or claim not already in your master resume. Rendered to a one-page, ATS-checked PDF.
+- **Assisted "Finish all".** Opens each application in a real browser window and fills it from your profile and a library of answers you've written once: contact details, education and experience entries, dropdowns, dates, EEO policy, uploads. It handles Workday's multi-step flow, too. Anything it can't answer becomes a question for you, and your answer is saved for next time.
+- **Inbox monitoring.** Optional read-only IMAP: marks applications submitted when the confirmation email arrives and shows emailed verification codes in the dashboard.
+- **Safe by default.** Never fabricates, never solves CAPTCHAs or bot checks, never stores passwords, never scrapes LinkedIn/Indeed/Glassdoor/Handshake. Real submissions are off until you switch them on.
+
+## Use it yourself
+
+Requirements: Python 3.12+, Node 18+ (only to build the dashboard), Git.
+
+```bash
+git clone https://github.com/vietanh411/internship-hunt.git
+cd internship-hunt
+python -m venv .venv
+# Windows: .venv\Scripts\activate    macOS/Linux: source .venv/bin/activate
+pip install -r requirements.txt
+python -m playwright install chromium
+cd frontend && npm install && npm run build && cd ..
+cp .env.example .env
 ```
 
-`config/profile.yaml` and `config/master_resume.yaml` are sample files with placeholder contact details. Put your real ones in `config/profile.local.yaml` and `config/master_resume.local.yaml` (git-ignored); they take precedence when present.
+Then make it yours:
 
-Other commands:
+1. **Profile**: copy `config/profile.yaml` to `config/profile.local.yaml` and fill in your details (name, school, degree, graduation date, work authorization).
+2. **Master resume**: copy `config/master_resume.yaml` to `config/master_resume.local.yaml` and put *everything true* about you in it. Tailoring can only use what's here.
+3. **Cities**: copy `config/metros.example.yaml` to `config/metros.yaml` and list the metros you want to work in.
+4. **Companies (optional)**: add employer job boards to `seeds/companies.yaml`. The included list is my own, which leans toward the Midwest and Texas.
+
+The `*.local.yaml` files and `config/metros.yaml` are git-ignored, so your details never end up in a commit. Then:
+
+```bash
+python -m hunt init      # create the database, import your profile, resume and job boards
+python -m hunt serve     # dashboard at http://127.0.0.1:8000 (+ the daily scheduler)
+```
+
+Open the dashboard → **Profile & Onboarding** and finish the checklist: confirm your work-authorization answers, the 18+ attestation and your EEO policy. Target roles, cities, score thresholds and daily caps are under **Automation**.
 
 | Command | What it does |
 |---|---|
-| `python -m hunt run` | Run the whole pipeline once (respects the dashboard settings). |
-| `python -m hunt run --dry-run` | Run it with no contact to any real employer. |
-| `python -m hunt run --stages discovery,verification` | Run only some stages. Every stage can be restarted safely. |
-| `python -m hunt dry-run` | Full demo: real discovery, scoring and resumes, plus real browser submissions to the **local mock ATS only**. |
-| `python -m hunt keygen` | Generate the key for `HUNT_SECRET_KEY`. |
-| `python -m pytest tests` | Run the test suite (unit, integration, Playwright end-to-end against the mock ATS). |
+| `python -m hunt run` | Run the whole pipeline once. |
+| `python -m hunt run --dry-run` | Run it without contacting any real employer. |
+| `python -m hunt dry-run` | Demo: real discovery and resumes, browser submissions to the **local mock ATS only**. |
+| `python -m hunt keygen` | Generate a key for `HUNT_SECRET_KEY` (encrypts phone, address, visa status and EEO answers). |
+| `python -m pytest tests` | Unit, integration and Playwright end-to-end tests against the mock ATS. |
 
-The dashboard is in `frontend/` (React + TypeScript + Tailwind). Rebuild it with `npm install && npm run build`; the server serves `frontend/dist`.
-
----
-
-## What's grounded in what
-
-| Your request | How it's handled |
-|---|---|
-| Fabricate qualifications, numbers, projects, employers, or work authorization | **Not implemented, by design.** Lying on an application can get an offer rescinded, and misstating immigration status can put F-1 status at risk. The tailoring engine only reorders and rewords facts in `config/master_resume.yaml`. Every reworded bullet goes through a fact guard (`hunt/resume/factguard.py`) that rejects new numbers, tools, leadership claims, or names, and keeps the original text instead. To use a skill that isn't on the resume, add it to **Profile → confirmed extra skills**. |
-| Circumvent CAPTCHAs / security controls | **Not implemented.** When the system detects a CAPTCHA, a bot check, a login wall, or MFA, it marks the application **Blocked** and alerts you to finish it yourself. |
-| Scrape LinkedIn, Indeed, Glassdoor, Handshake, ZipRecruiter | **Not implemented.** Their terms prohibit automated scraping and they block it, which could get your accounts banned. Discovery uses public ATS job-board APIs (the same JSON employers' own career pages load) and the community-maintained Summer 2027 lists, which already aggregate those sites' postings and link to employer pages. |
+Optional settings in `.env`: `ANTHROPIC_API_KEY` (Claude rewording, cover letters, open-ended answers; templates are used without it), `HUNT_IMAP_USER`/`HUNT_IMAP_PASSWORD` (Gmail app password for inbox monitoring), `HUNT_SMTP_*` (emailed daily report). The search targets **Summer 2027** internships; the term lives in `hunt/discovery/` and `hunt/matching.py`.
 
 ---
 
-## Pipeline
+## How it works
 
-1. **Discovery** (`hunt/discovery/`)
-   - Community feeds: SimplifyJobs and vanshb03 Summer 2027 `listings.json` (public GitHub data).
-   - Direct employer boards, polled via public APIs: **Greenhouse, Lever, Ashby, SmartRecruiters, Workday**.
-   - Boards come from `seeds/companies.yaml` (curated regional, lesser-known employers in Madison, Chicago, OKC and DFW) and are also learned automatically from feed URLs.
-   - Direct polling finds postings before they appear on the lists. Lesser-known companies get a ranking boost.
-   - Filters: internship title, target role categories, US location, Summer 2027 term, posting age, PhD-only.
-2. **Verification**: each posting is re-checked on the employer's ATS (API, or the page itself with robots.txt honored). Closed or missing postings become **Expired**. Jobs are re-verified every 3 days.
-3. **Deduplication**: the same requisition on several sites becomes one job. Matching uses the ATS id, then company + title + location / requisition id.
-4. **Eligibility** (`hunt/eligibility.py`): sentence-level rules on the exact posting language, keeping these categories distinct:
+1. **Discovery** (`hunt/discovery/`): community `listings.json` feeds plus direct polling of employer boards. Boards are seeded from `seeds/companies.yaml` and learned automatically from feed links. Filters: internship title, target roles, US location, term, posting age.
+2. **Verification**: every posting is re-checked on the employer's site; closed or removed ones become **Expired**.
+3. **Deduplication**: the same requisition across sites becomes one job (ATS id, then company + title + location).
+4. **Eligibility** (`hunt/eligibility.py`): checks your profile against the posting's own words.
 
-   | Category | Default verdict |
+   | Posting says | Default verdict |
    |---|---|
-   | CPT/OPT accepted | Eligible |
-   | Generic "authorized to work" | Eligible (CPT/OPT satisfies it) |
-   | "Without sponsorship" with no mention of future | Review (configurable) |
+   | CPT/OPT accepted, or generic "authorized to work" | Eligible |
+   | "Without sponsorship" with no mention of the future | Review (configurable) |
    | Employer won't sponsor H-1B | Review (configurable) |
-   | Applicants needing future sponsorship are excluded | **Ineligible** |
-   | Citizenship / permanent residency / security clearance / ITAR US-person required, or F-1 explicitly excluded | **Ineligible** |
+   | Future sponsorship excluded, citizenship / clearance / ITAR required | **Ineligible** for applicants it applies to |
+   | Undergraduate-only (for graduate applicants) or PhD-only | **Ineligible** |
    | Nothing stated | Eligible (configurable) |
 
-   Every verdict stores the quoted sentence. Ineligible jobs are never applied to.
-5. **Matching** (`hunt/matching.py`): 0–100 score using your weights (skills 30 / experience 25 / education 15 / location 10 / eligibility+timing 15 / compensation 5, editable). Eligibility is a hard gate. Each score comes with strengths, gaps, missing required/preferred skills, and the resume bullets that support it. Tiers: Excellent ≥85, Strong ≥70, Moderate ≥55, Low.
-6. **Resume tailoring** (`hunt/resume/`):
-   - Reorders bullets, projects and skills toward the posting and aligns terminology.
-   - Rewords bullets with Claude when `ANTHROPIC_API_KEY` is set, with every change fact-guarded.
-   - Renders a one-page ATS-safe PDF matching your LaTeX template, then validates it by extracting the text back out.
-   - Saves to `data/applications/2027/<company>/<job_id>/<version>/Resume_VietAnhNguyen.pdf`, and stores it in the database with its keywords, change log, fact-check, ATS check, version id and score.
-   - Generates a cover letter when the form or posting requires one (or per your setting).
-7. **Applications** (`hunt/apply/`):
-   - Builds an answer plan for every form field: **fixed** (verified profile facts), **contextual** (generated and fact-guarded), **sensitive** (EEO, per your policy), or **human-required** (legal, ambiguous or unverifiable).
-   - Checks for contradictions, then submits with Playwright.
-   - Details in [How submission works](#how-submission-works).
-8. **Confirmation**: optional Gmail monitoring over read-only IMAP. Classifies confirmations, interviews, assessments, rejections, offers and info requests, and updates the matching application. It never replies to anyone.
-9. **Reporting**: daily report (dashboard, plus email to you if SMTP is set).
+5. **Matching** (`hunt/matching.py`): a 0–100 score from editable weights (skills, experience, education, location, eligibility and timing, pay), with strengths, gaps and the resume bullets that back it up.
+6. **Resume tailoring** (`hunt/resume/`): reorder → reword (fact-guarded) → render a one-page PDF → extract the text back out to verify it. Cover letters when required.
+7. **Applications** (`hunt/apply/`): every form field gets an answer plan: **fixed** (profile facts), **saved** (your answer library), **contextual** (generated and fact-guarded), **sensitive** (EEO policy) or **ask me**. Then Playwright fills the form. Greenhouse, Lever and Ashby are single-page; Workday is driven step by step (sign-in pauses for you, the autofill step, entry syncing, date widgets, error checks).
+8. **Confirmation & reporting**: **Submitted** is recorded only when a confirmation page or email is seen. A daily report goes to the dashboard and, optionally, your inbox.
 
-Orchestration (`hunt/pipeline/`):
-- Durable DB task queue with exponential backoff.
-- Per-host rate limits and Retry-After handling.
-- A run lock (no duplicate runs), per-item commits (checkpointing), and stage failure isolation.
-- Cancellation, time budgets, and recovery of interrupted work.
+Orchestration (`hunt/pipeline/`): a durable task queue with backoff, per-host rate limits, a run lock, per-item checkpoints, time budgets and recovery of interrupted work.
 
-## How submission works
+### Platforms
 
-Applications are sent automatically only when **all** of these hold. Otherwise they wait in the dashboard with the reason.
-
-- `HUNT_ALLOW_REAL_SUBMISSIONS=true` is set on the server (hard kill switch; default **false**).
-- Mode A (auto) is selected and the score ≥ the auto-apply minimum, **or** you approved the application (Mode B, the default).
-- Eligibility is **Eligible** (Review jobs need your approval).
-- Onboarding is complete, including confirming the work-authorization answers.
-- Every required question has a verified answer and there are no contradictions.
-- The resume passed the fact check and the ATS check.
-- The daily cap isn't reached and there's no prior submission to the same requisition.
-
-**Submitted** is recorded only when a confirmation page or confirmation email is observed. If the submit button was clicked but no confirmation appeared, the application goes to **Blocked** for you to verify. It is never resubmitted automatically.
-
-### Supported application platforms
-
-| Platform | Discovery | Verification | Automatic submission |
-|---|---|---|---|
-| Greenhouse | ✅ API | ✅ API | ✅ Browser (questions read from the API in advance) |
-| Lever | ✅ API | ✅ API | ✅ Browser (questions read from the live form) |
-| Ashby | ✅ API | ✅ API | ✅ Browser (questions read from the live form) |
-| SmartRecruiters | ✅ API | ✅ API | ➖ Manual packet |
-| Workday | ✅ CXS API | ✅ | ➖ Manual: needs an applicant account per employer |
-| iCIMS, Oracle, SuccessFactors, Taleo, others | via feeds | page check | ➖ Manual: needs an account |
-
-For "Manual" jobs the system still tailors the resume and prepares an answer sheet. You submit through the link, then click **Mark submitted** (it asks for confirmation details).
-
-The browser automation has been verified end to end against the local mock ATS. Per your instructions, no test applications were sent to real employers, so a live Greenhouse, Lever or Ashby submission hasn't been exercised yet. Selectors can drift when an ATS changes its markup. Failures then show up as **Failed**/**Blocked** with a screenshot, never as a false "Submitted".
+| Platform | Discovery | Applications |
+|---|---|---|
+| Greenhouse (incl. company-site embeds) | API | Assisted (emailed security codes shown in the dashboard) |
+| Lever | API | Assisted |
+| Ashby | API | Assisted or automatic |
+| Workday | CXS API | Assisted, multi-step (you sign in; the rest is filled) |
+| SmartRecruiters, iCIMS, others | API / feeds | Tailored resume + answer sheet for you to submit |
 
 ---
 
-## Running daily without your PC
+## What I learned building it
 
-`python -m hunt serve` runs the 9:00 scheduler only while the process is up. For PC-off operation, pick one:
-
-**A. GitHub Actions + free Postgres (no server to manage)**
-1. Push this folder to a GitHub repo (use a **private** one if you commit your real profile). `.env`, `data/` and `config/*.local.yaml` are git-ignored.
-   The scheduled run is off until you set the repo variable `HUNT_ENABLE_SCHEDULE=true`.
-2. Create a free Postgres database (e.g. Neon or Supabase) and copy its connection string as `postgresql+psycopg://…`.
-3. Add repository secrets:
-   - Required: `DATABASE_URL`, `HUNT_SECRET_KEY`
-   - Optional: `ANTHROPIC_API_KEY`, `HUNT_IMAP_*`, `HUNT_SMTP_*`, `HUNT_NOTIFY_EMAIL`
-4. Optional: set the repo variable `HUNT_ALLOW_REAL_SUBMISSIONS=true` once you've reviewed a few runs.
-5. `.github/workflows/daily-hunt.yml` runs at 09:00 Chicago time year-round (it fires at both UTC offsets and exits outside the 9 o'clock hour).
-6. Point the dashboard at the same `DATABASE_URL` (locally, or with option B) to watch it.
-
-**B. Always-on host** (VPS / Render / Railway / Fly.io): `docker compose up -d`, or deploy the `Dockerfile` with `DATABASE_URL` set. Set `HUNT_DASHBOARD_PASSWORD` whenever the dashboard is reachable from the internet.
-
-**C. This PC only**: `scripts\register-windows-task.ps1` registers a daily 9:00 Task Scheduler job. It runs only when the PC is on.
+- **The real world is the hard part, not the model.** Workday's custom dropdowns and date pickers broke the filler over and over; one page "twitched" for two minutes because every field waited out a 15-second timeout. What fixed it was evidence: recording real sessions (screenshots, video, Playwright traces), dumping each step's layout, and building a mock Workday to test against.
+- **Don't trust automation's output, including other people's.** Workday's own "autofill from resume" put the wrong text in names and job descriptions, so the filler now compares every prefilled value with the profile and fixes only what contradicts it.
+- **Draw the lines on purpose.** The tool never invents an answer, never touches a CAPTCHA and never handles passwords. Instead, unknown questions come back to me once and are remembered, so the tool got more automatic over time without ever making things up.
+- **Ranking matters as much as finding.** Applying early matters, so the queue puts postings from today and yesterday on quick-to-finish platforms first, not just the highest match scores.
 
 ---
 
-## Setup checklist
+## Running daily without your computer
 
-1. Open the dashboard → **Profile & Onboarding**:
-   - Confirm the work-authorization statements.
-   - Fill in city/state, the 18+ attestation, and the EEO policy.
-   - Optionally add GitHub, portfolio, ZIP, latest end date and minimum pay.
-2. **Answer library**: approve the standard "certify information is accurate" and privacy-consent acknowledgements if you want them reused.
-3. Optional integrations (in `.env`):
-   - `HUNT_SECRET_KEY`: encryption at rest. Set it **before** entering your address.
-   - `ANTHROPIC_API_KEY`: Claude rewording, cover letters, open-ended answers. Without it, deterministic templates are used.
-   - `HUNT_IMAP_USER` / `HUNT_IMAP_PASSWORD`: Gmail app password for inbox monitoring.
-   - `HUNT_SMTP_*` + `HUNT_NOTIFY_EMAIL`: emailed daily report and alerts.
-4. Review a few prepared applications in **Review** mode. Then, if you want, set `HUNT_ALLOW_REAL_SUBMISSIONS=true` and switch to Mode A.
+- **GitHub Actions + free Postgres**: `.github/workflows/daily-hunt.yml` runs the pipeline at 9:00 America/Chicago. Add the `DATABASE_URL` and `HUNT_SECRET_KEY` secrets (plus the optional ones listed in the file) and set the repo variable `HUNT_ENABLE_SCHEDULE=true`. Use a **private** fork if you commit your real profile.
+- **Always-on host**: `docker compose up -d`, or deploy the `Dockerfile` with `DATABASE_URL` set. Set `HUNT_DASHBOARD_PASSWORD` if the dashboard is reachable from the internet.
+- **Windows Task Scheduler**: `scripts/register-windows-task.ps1` (daily run) and `scripts/register-dashboard-task.ps1` (dashboard at sign-in).
 
 ## Data & security
 
-- Secrets live only in `.env` / CI secrets.
-- Phone, address, visa status and EEO answers are Fernet-encrypted when `HUNT_SECRET_KEY` is set.
-- The dashboard binds to localhost unless configured otherwise; password login is available.
-- Every user action and status transition is written to an audit log.
-- Dashboard → Profile → **Export** downloads a zip of all data, including every resume version. **Delete** wipes job data, or everything.
+- Secrets live only in `.env` / CI secrets; your data lives in `data/` (git-ignored).
+- Phone, address, visa status and EEO answers are encrypted at rest when `HUNT_SECRET_KEY` is set.
+- The dashboard binds to localhost by default; password login is available.
+- Every action and status change is written to an audit log. **Profile → Export** downloads everything; **Delete** wipes it.
+- Real submissions require `HUNT_ALLOW_REAL_SUBMISSIONS=true` *and* your approval in the dashboard.
+
+## Disclaimer
+
+Use it responsibly: follow each site's terms, answer every question truthfully, and review every application before it's sent. You are responsible for what you submit.

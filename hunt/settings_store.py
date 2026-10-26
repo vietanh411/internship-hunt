@@ -6,6 +6,7 @@ from typing import Any
 
 from sqlalchemy.orm import Session
 
+from hunt.discovery.normalize import METROS
 from hunt.models import SettingRow
 
 AUTOMATION_KEY = "automation"
@@ -23,7 +24,7 @@ DEFAULT_AUTOMATION: dict[str, Any] = {
     "automation_enabled": True,
     "paused": False,
     "apply_mode": "review",  # "auto" (Mode A) or "review" (Mode B)
-    "preferred_cities": ["Madison, WI", "Chicago, IL", "Oklahoma City, OK", "Dallas, TX"],
+    "preferred_cities": list(METROS),  # your metros from config/metros.yaml
     "include_nearby_metros": True,
     "include_remote_us": True,
     "include_other_us": True,

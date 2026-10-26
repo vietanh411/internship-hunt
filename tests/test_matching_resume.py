@@ -11,7 +11,7 @@ from hunt.resume.render import page_count, render_fitted
 from hunt.resume.tailor import tailor_resume
 from hunt.settings_store import DEFAULT_AUTOMATION
 
-MASTER = yaml.safe_load(open(ROOT / "config" / "master_resume.yaml", encoding="utf-8"))
+MASTER = yaml.safe_load(open(ROOT / "tests" / "fixtures" / "master_resume.yaml", encoding="utf-8"))
 PROFILE = {"education": {"expected_graduation_date": "2027-12-15", "undergrad_gpa": "3.85"},
            "availability": {"earliest_start_date": "2027-05-30", "willing_to_relocate": True},
            "preferences": {"min_hourly_rate": 20}, "confirmed_extra_skills": []}

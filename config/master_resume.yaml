@@ -1,103 +1,53 @@
-# Source of truth for every tailored resume. Transcribed verbatim from
-# D:\Job\Resumes\Resume_VietAnhNguyen.tex (2026-10-05). **double asterisks** mark
-# bold spans, as in the original. Tailoring may reorder and reword bullets, but
-# the fact guard rejects any number, tool, or claim that is not present here.
+# Your master resume: the source of truth for every tailored resume. Tailoring may
+# reorder and reword bullets, but the fact guard (hunt/resume/factguard.py) rejects
+# any number, tool, or claim that is not present here, so put everything true in it.
+# **double asterisks** mark bold spans. Bullet ids must be unique.
+#
+# Keep your real resume out of git: copy this file to config/master_resume.local.yaml
+# (git-ignored) and edit that copy. It takes precedence when present.
 basics:
-  name: Viet Anh Nguyen
+  name: Jane Doe
   phone: (555) 010-0100
-  email: applicant@example.com
-  linkedin_label: linkedin.com/in/viet-anh-nguyen-898238343
-  linkedin_url: https://www.linkedin.com/in/viet-anh-nguyen-898238343
+  email: jane.doe@example.com
+  linkedin_label: linkedin.com/in/janedoe
+  linkedin_url: https://www.linkedin.com/in/janedoe
 
 education:
-  - id: uw-ms
-    school: University of Wisconsin–Madison
-    location: Madison, WI
-    degree: Master of Science in Data Science
-    dates: Expected Dec 2027
-    level: masters
-    field: Data Science
-  - id: ou-bs
-    school: University of Oklahoma
-    location: Norman, OK
+  - id: esu-bs
+    school: Example State University
+    location: Austin, TX
     degree: Bachelor of Science in Computer Science
-    gpa: "3.85"
-    dates: May 2026
-    level: bachelors
+    gpa: "3.70"
+    dates: Expected May 2028
+    level: bachelors           # bachelors / masters / phd
     field: Computer Science
 
 experience:
-  - id: ou-research
-    org: University of Oklahoma
-    location: Norman, OK
-    title: Undergraduate Computer Science Researcher
-    dates: Jan 2026 – May 2026
-    tech: [Python, REST APIs, Reddit, GitHub, Thematic Analysis]
+  - id: lab
+    org: Example State University
+    location: Austin, TX
+    title: Undergraduate Research Assistant
+    dates: Jan 2026 – Present
+    tech: [Python, Pandas, SQL]
     bullets:
-      - id: ou-1
-        text: Built a research corpus of **300K+ lines** of developer and user discussion by scraping and cleaning text from **Reddit** and **GitHub** through their **REST APIs** in **Python**.
-      - id: ou-2
-        text: Uncovered how developers and users perceive AI agents by running a **thematic analysis** across **2 platforms**.
-      - id: ou-3
-        text: Delivered research insights on where developer and user views of AI agents diverge by synthesizing cross-platform findings into a comparative analysis.
-
-  - id: vnnic
-    org: VNNIC (Vietnam Internet Network Information Center)
-    location: Hanoi, Vietnam
-    title: Data Science Intern
-    dates: Jun 2024 – Aug 2024
-    tech: [SQL, EDA, ETL Pipelines, Power BI]
-    bullets:
-      - id: vn-1
-        text: Supported national internet policy research by processing and analyzing **10M+ DNS records** with **SQL** and exploratory data analysis.
-      - id: vn-2
-        text: Automated data preparation by designing and deploying **3+ ETL pipelines** that clean and transform raw DNS data, feeding interactive **Power BI** dashboards that track domain registration and network trends.
-      - id: vn-3
-        text: Improved threat detection by delivering **2 cybersecurity infrastructure prototypes** with **6 engineers**.
+      - id: lab-1
+        text: Cleaned and analyzed **50K+ survey responses** with **Python** and **Pandas** for a faculty research project.
+      - id: lab-2
+        text: Built **SQL** views that cut the lab's weekly reporting time from hours to minutes.
 
 projects:
-  - id: ppe
-    name: AI Risk Assessment & PPE Recommender
-    context: Tinker AFB
-    tech: [Python, spaCy, FastAPI, React, PostgreSQL, NLP, REST APIs]
+  - id: tracker
+    name: Course Planner
+    context: Personal project
+    tech: [React, FastAPI, PostgreSQL, REST APIs]
     bullets:
-      - id: ppe-1
-        text: Automated PPE and safety-control recommendations from risk assessment records by developing an **NLP pipeline** with **spaCy** and fuzzy matching.
-      - id: ppe-2
-        text: Centralized safety records, recommendations, and analytics by building a full-stack platform (**FastAPI**, **React**, **PostgreSQL**) exposing **16 REST API endpoints**.
-      - id: ppe-3
-        text: Enabled fast materials lookup with a searchable **AUL** module indexed by material name, MSN, and shop code.
-
-  - id: jobscraper
-    name: JobScraper
-    context: Job Market Analytics
-    tech: [Python, BeautifulSoup, Requests, Pandas, Web Scraping]
-    bullets:
-      - id: js-1
-        text: Collected **500+ job postings/day** from major career sites by developing a modular web scraper with **BeautifulSoup** and **Requests**.
-      - id: js-2
-        text: Produced analysis-ready datasets by cleaning job metadata (title, company, location, date) with **Pandas**.
-      - id: js-3
-        text: Tracked hiring and skill trends across the **top 50 companies** by automating daily scraping and analysis.
-
-  - id: eduorder
-    name: Education Order
-    context: Online Tutoring Platform
-    tech: [Node.js, Express, JavaScript, PostgreSQL, Docker, CI/CD, REST APIs]
-    bullets:
-      - id: eo-1
-        text: Supported **100+ concurrent users** with session booking and management by building a full-stack tutoring platform on **Node.js/Express** and **PostgreSQL**.
-      - id: eo-2
-        text: Enabled scalable data access by designing a normalized schema of **8+ tables** and the REST APIs that serve it.
-      - id: eo-3
-        text: Cut page load time by **30%** by optimizing API integration and frontend performance.
-      - id: eo-4
-        text: Reduced deployments to under **10 minutes** by containerizing services with **Docker** and automating **CI/CD**.
+      - id: tr-1
+        text: Built a full-stack course planner (**React**, **FastAPI**, **PostgreSQL**) used by **200+ students**.
+      - id: tr-2
+        text: Designed **REST APIs** and a normalized schema for courses, prerequisites, and schedules.
 
 skills:
   - category: Languages
-    items: [Python, SQL, R, Java, C++, JavaScript, HTML/CSS]
-  - category: Data Science & ML
-    items: [Pandas, NumPy, scikit-learn, spaCy, NLP, Regression, Classification, Random Forest, Feature Engineering, Hypothesis Testing, EDA]
+    items: [Python, SQL, JavaScript, Java]
   - category: Frameworks & Tools
-    items: [FastAPI, React, Node.js, PostgreSQL, SQLite, ETL Pipelines, REST APIs, Docker, CI/CD, Git, Power BI, Tableau, Streamlit, Jupyter]
+    items: [Pandas, React, FastAPI, PostgreSQL, Git, Docker]

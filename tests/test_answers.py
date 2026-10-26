@@ -7,8 +7,8 @@ from hunt.apply.answers import Context, FormField, answer_field, check_contradic
 from hunt.config import ROOT
 from hunt.profile_store import _jsonable
 
-MASTER = yaml.safe_load(open(ROOT / "config" / "master_resume.yaml", encoding="utf-8"))
-BASE_PROFILE = _jsonable(yaml.safe_load(open(ROOT / "config" / "profile.yaml", encoding="utf-8")))
+MASTER = yaml.safe_load(open(ROOT / "tests" / "fixtures" / "master_resume.yaml", encoding="utf-8"))
+BASE_PROFILE = _jsonable(yaml.safe_load(open(ROOT / "tests" / "fixtures" / "profile.yaml", encoding="utf-8")))
 
 
 def ctx(confirmed=True, eeo="ask", **profile_patch):

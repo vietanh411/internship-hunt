@@ -100,7 +100,7 @@ def cmd_dry_run(args) -> None:
 
 
 def main(argv: list[str] | None = None) -> None:
-    p = argparse.ArgumentParser(prog="hunt", description="Viet Anh's Summer 2027 Hunt")
+    p = argparse.ArgumentParser(prog="hunt", description="Internship Hunt")
     p.add_argument("-v", "--verbose", action="store_true")
     p.add_argument("--log-file", help="append all output to this file (used by the windowless scheduled task)")
     sub = p.add_subparsers(dest="cmd", required=True)
