@@ -1,0 +1,25 @@
+# Self-hosted: `docker compose up -d` on any always-on machine.
+# Put secrets in .env next to this file (see .env.example).
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: hunt
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB: hunt
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+  app:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://hunt:${POSTGRES_PASSWORD:-change-me}@db/hunt
+      HUNT_HOST: 0.0.0.0
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    restart: unless-stopped
+volumes:
+  pgdata:

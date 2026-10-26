@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Chart tokens (validated with the dataviz palette validator against #ffffff and #0f172a). */
+:root {
+  color-scheme: light;
+  --series-1: #2a78d6; /* discovered */
+  --series-2: #eb6834; /* resumes */
+  --series-3: #1baf7a; /* submitted */
+  --chart-grid: #e2e8f0;
+  --chart-axis: #cbd5e1;
+  --chart-ink-muted: #64748b;
+  --meter-track: #cde2fb;
+  --meter-fill: #2a78d6;
+}
+.dark {
+  color-scheme: dark;
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --chart-grid: #1e293b;
+  --chart-axis: #334155;
+  --chart-ink-muted: #94a3b8;
+  --meter-track: #17325a;
+  --meter-fill: #3987e5;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  :focus-visible {
+    @apply outline-none ring-2 ring-indigo-500 ring-offset-2 ring-offset-white dark:ring-indigo-400 dark:ring-offset-slate-950;
+  }
+}
+
+@layer components {
+  .input {
+    @apply block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm placeholder:text-slate-400
+      focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30
+      disabled:cursor-not-allowed disabled:opacity-60
+      dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-indigo-400;
+  }
+  .label {
+    @apply block text-sm font-medium text-slate-700 dark:text-slate-300;
+  }
+  .hint {
+    @apply mt-1 text-xs text-slate-500 dark:text-slate-400;
+  }
+  .card {
+    @apply rounded-xl border border-slate-200 bg-white shadow-card dark:border-slate-800 dark:bg-slate-900;
+  }
+  .link {
+    @apply font-medium text-indigo-600 hover:text-indigo-500 hover:underline dark:text-indigo-400 dark:hover:text-indigo-300;
+  }
+  .muted {
+    @apply text-slate-500 dark:text-slate-400;
+  }
+  .table-head {
+    @apply bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:bg-slate-800/60 dark:text-slate-400;
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

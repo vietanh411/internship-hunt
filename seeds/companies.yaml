@@ -1,0 +1,83 @@
+# Verified 2026-10-13. Regional employers with public ATS job APIs.
+greenhouse:
+  - {token: "simplextrading", company: "Simplex Trading", metro: "Chicago, IL", industry: "trading"}
+  - {token: "magnetar", company: "Magnetar", metro: "Chicago, IL", industry: "hedge fund"}
+  - {token: "harrisassociates", company: "Harris Associates (Oakmark Funds)", metro: "Chicago, IL", industry: "asset management"}
+  - {token: "adamsstreetpartners", company: "Adams Street Partners", metro: "Chicago, IL", industry: "private equity"}
+  - {token: "arielinvestments", company: "Ariel Investments", metro: "Chicago, IL", industry: "asset management"}
+  - {token: "civisanalytics", company: "Civis Analytics", metro: "Chicago, IL", industry: "data science/analytics"}
+  - {token: "healthjoy", company: "HealthJoy", metro: "Chicago, IL", industry: "healthtech"}
+  - {token: "jellyvision", company: "Jellyvision", metro: "Chicago, IL", industry: "HR/benefits tech"}
+  - {token: "keepersecurity", company: "Keeper Security", metro: "Chicago, IL", industry: "cybersecurity"}
+  - {token: "project44", company: "project44", metro: "Chicago, IL", industry: "logistics tech"}
+  - {token: "amount", company: "Amount (FIS)", metro: "Chicago, IL", industry: "fintech"}
+  - {token: "hologram", company: "Hologram", metro: "Chicago, IL", industry: "IoT connectivity"}
+  - {token: "dscout", company: "dscout", metro: "Chicago, IL", industry: "research SaaS"}
+  - {token: "builtin", company: "Built In", metro: "Chicago, IL", industry: "tech media/marketplace"}
+  - {token: "rushstreetinteractive", company: "Rush Street Interactive", metro: "Chicago, IL", industry: "online gaming"}
+  - {token: "sproutsocial", company: "Sprout Social", metro: "Chicago, IL", industry: "SaaS"}
+  - {token: "pangeamoneytransfer", company: "Pangea Money Transfer", metro: "Chicago, IL", industry: "fintech"}
+  - {token: "opploans", company: "OppFi", metro: "Chicago, IL", industry: "fintech"}
+  - {token: "shipbobinc", company: "ShipBob", metro: "Chicago, IL", industry: "logistics tech"}
+  - {token: "vividseatsllc", company: "Vivid Seats", metro: "Chicago, IL", industry: "ticketing marketplace"}
+  - {token: "cameo", company: "Cameo", metro: "Chicago, IL", industry: "consumer tech"}
+  - {token: "cleo", company: "Cleo", metro: "Chicago, IL", industry: "integration SaaS"}
+  - {token: "rewardsnetwork", company: "Rewards Network", metro: "Chicago, IL", industry: "fintech"}
+  - {token: "toyotaconnected", company: "Toyota Connected North America", metro: "Dallas, TX", industry: "connected vehicle tech"}
+  - {token: "hbkcapitalmanagement", company: "HBK Capital Management", metro: "Dallas, TX", industry: "hedge fund"}
+  - {token: "hippo70", company: "Hippo Insurance", metro: "Dallas, TX", industry: "insurtech"}
+  - {token: "dudeperfect", company: "Dude Perfect", metro: "Dallas, TX", industry: "sports media"}
+  - {token: "tollesonwealthmanagement", company: "Tolleson Wealth Management", metro: "Dallas, TX", industry: "wealth management"}
+  - {token: "moxehealth", company: "Moxe Health", metro: "Madison, WI", industry: "healthtech"}
+  - {token: "pacificcycle", company: "Pacific Cycle", metro: "Madison, WI", industry: "consumer products"}
+  - {token: "michelscorporation", company: "Michels Corporation", metro: "Milwaukee, WI", industry: "construction/utilities"}
+  - {token: "interworks", company: "InterWorks", metro: "Oklahoma City, OK", industry: "data consulting"}
+lever:
+  - {token: "valkyrietrading", company: "Valkyrie Trading", metro: "Chicago, IL", industry: "trading"}
+  - {token: "basis", company: "Basis Technologies", metro: "Chicago, IL", industry: "adtech"}
+  - {token: "tovala", company: "Tovala", metro: "Chicago, IL", industry: "food tech"}
+  - {token: "activecampaign", company: "ActiveCampaign", metro: "Chicago, IL", industry: "SaaS"}
+  - {token: "braviantholdings", company: "Braviant Holdings", metro: "Dallas, TX", industry: "fintech"}
+  - {token: "redoxengine", company: "Redox", metro: "Madison, WI", industry: "healthtech"}
+  - {token: "zeeco", company: "Zeeco", metro: "Tulsa, OK", industry: "industrial manufacturing"}
+ashby:
+  - {token: "kin", company: "Kin Insurance", metro: "Chicago, IL", industry: "insurtech"}
+  - {token: "spoton", company: "SpotOn", metro: "Chicago, IL", industry: "fintech/restaurant tech"}
+  - {token: "bestow", company: "Bestow", metro: "Dallas, TX", industry: "insurtech"}
+  - {token: "pariveda", company: "Pariveda", metro: "Dallas, TX", industry: "consulting"}
+smartrecruiters: []
+workday:
+  - {company: "Kemper", metro: "Chicago, IL", industry: "insurance", host: "kemper.wd5.myworkdayjobs.com", tenant: "kemper", site: "Kemper_Careers"}
+  - {company: "Huron Consulting Group", metro: "Chicago, IL", industry: "consulting", host: "huron.wd1.myworkdayjobs.com", tenant: "huron", site: "huroncareers"}
+  - {company: "Ryan Specialty", metro: "Chicago, IL", industry: "insurance", host: "ryansg.wd5.myworkdayjobs.com", tenant: "ryansg", site: "Ryan_Specialty_Career_Site"}
+  - {company: "Accel Entertainment", metro: "Chicago, IL", industry: "gaming", host: "accelentertainment.wd12.myworkdayjobs.com", tenant: "accelentertainment", site: "AccelEntertainment_Careers"}
+  - {company: "Ventas", metro: "Chicago, IL", industry: "healthcare real estate", host: "ventas.wd503.myworkdayjobs.com", tenant: "ventas", site: "ventas_careers"}
+  - {company: "Option Care Health", metro: "Chicago, IL", industry: "healthcare", host: "optioncare.wd1.myworkdayjobs.com", tenant: "optioncare", site: "optioncare"}
+  - {company: "Alkami Technology", metro: "Dallas, TX", industry: "fintech SaaS", host: "alkami.wd12.myworkdayjobs.com", tenant: "alkami", site: "Alkami"}
+  - {company: "Trintech", metro: "Dallas, TX", industry: "fintech SaaS", host: "trintech.wd501.myworkdayjobs.com", tenant: "trintech", site: "Trintech"}
+  - {company: "Solera", metro: "Dallas, TX", industry: "auto data/SaaS", host: "solera.wd5.myworkdayjobs.com", tenant: "solera", site: "Global_Career_Site"}
+  - {company: "Exeter Finance", metro: "Dallas, TX", industry: "auto finance", host: "exeterfinance.wd1.myworkdayjobs.com", tenant: "exeterfinance", site: "External"}
+  - {company: "Hallmark Financial", metro: "Dallas, TX", industry: "insurance", host: "hallmarkgrp.wd1.myworkdayjobs.com", tenant: "hallmarkgrp", site: "Hallmark_Careers"}
+  - {company: "Federal Home Loan Bank of Dallas", metro: "Dallas, TX", industry: "banking", host: "fhlb.wd1.myworkdayjobs.com", tenant: "fhlb", site: "FHLB_Careers"}
+  - {company: "Atmos Energy", metro: "Dallas, TX", industry: "utilities", host: "atmosenergy.wd108.myworkdayjobs.com", tenant: "atmosenergy", site: "External_Career_Site"}
+  - {company: "Invitation Homes", metro: "Dallas, TX", industry: "real estate", host: "invitationhomes.wd503.myworkdayjobs.com", tenant: "invitationhomes", site: "INVH"}
+  - {company: "Cook Children's Health Care System", metro: "Dallas, TX", industry: "healthcare", host: "cookchildrens.wd1.myworkdayjobs.com", tenant: "cookchildrens", site: "Cook_Childrens_Careers"}
+  - {company: "Topgolf", metro: "Dallas, TX", industry: "entertainment", host: "topgolf.wd501.myworkdayjobs.com", tenant: "topgolf", site: "TopgolfCareers"}
+  - {company: "Cinemark", metro: "Dallas, TX", industry: "entertainment", host: "cinemark.wd1.myworkdayjobs.com", tenant: "cinemark", site: "cinemark"}
+  - {company: "Galderma", metro: "Dallas, TX", industry: "pharma/dermatology", host: "galderma.wd3.myworkdayjobs.com", tenant: "galderma", site: "External"}
+  - {company: "Alliant Energy", metro: "Madison, WI", industry: "utilities", host: "alliantenergy.wd1.myworkdayjobs.com", tenant: "alliantenergy", site: "alliant"}
+  - {company: "Nordic Consulting", metro: "Madison, WI", industry: "healthcare IT consulting", host: "nordic.wd1.myworkdayjobs.com", tenant: "nordic", site: "Nordic"}
+  - {company: "Trek Bicycle", metro: "Madison, WI", industry: "manufacturing", host: "trekbikes.wd1.myworkdayjobs.com", tenant: "trekbikes", site: "TREK"}
+  - {company: "University of Wisconsin-Madison", metro: "Madison, WI", industry: "university/research", host: "wisconsin.wd1.myworkdayjobs.com", tenant: "wisconsin", site: "UW_Madison"}
+  - {company: "Medical College of Wisconsin", metro: "Milwaukee, WI", industry: "research/medicine", host: "mcw.wd503.myworkdayjobs.com", tenant: "mcw", site: "ExternalCareers"}
+  - {company: "OU Health", metro: "Oklahoma City, OK", industry: "healthcare", host: "oumedicine.wd5.myworkdayjobs.com", tenant: "oumedicine", site: "OUHealthCareers"}
+  - {company: "Gulfport Energy", metro: "Oklahoma City, OK", industry: "energy", host: "gulfportenergy.wd5.myworkdayjobs.com", tenant: "gulfportenergy", site: "GPOR_Career_Site"}
+  - {company: "Chickasaw Nation Industries", metro: "Oklahoma City, OK", industry: "govtech/IT services", host: "cni.wd503.myworkdayjobs.com", tenant: "cni", site: "CNI"}
+  - {company: "Dolese Bros. Co.", metro: "Oklahoma City, OK", industry: "construction materials", host: "dolese.wd1.myworkdayjobs.com", tenant: "dolese", site: "DoleseBros"}
+  - {company: "Helmerich & Payne", metro: "Tulsa, OK", industry: "energy", host: "hpinc.wd5.myworkdayjobs.com", tenant: "hpinc", site: "hpinc"}
+  - {company: "AAON", metro: "Tulsa, OK", industry: "HVAC manufacturing", host: "aaon.wd108.myworkdayjobs.com", tenant: "aaon", site: "AAON"}
+  - {company: "Saint Francis Health System", metro: "Tulsa, OK", industry: "healthcare", host: "saintfrancis.wd115.myworkdayjobs.com", tenant: "saintfrancis", site: "External"}
+  - {company: "Webco Industries", metro: "Tulsa, OK", industry: "manufacturing", host: "webcotube.wd12.myworkdayjobs.com", tenant: "webcotube", site: "Webco"}
+  - {company: "Madison College", metro: "Madison, WI", industry: "education", host: "madisoncollege.wd115.myworkdayjobs.com", tenant: "madisoncollege", site: "jobsatMadisonCollege"}
+  - {company: "University of Wisconsin-Milwaukee", metro: "Milwaukee, WI", industry: "university/research", host: "wisconsin.wd1.myworkdayjobs.com", tenant: "wisconsin", site: "UW_Milwaukee"}
+  - {company: "Mustang Fuel", metro: "Oklahoma City, OK", industry: "energy", host: "mustangfuel.wd5.myworkdayjobs.com", tenant: "mustangfuel", site: "External"}

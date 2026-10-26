@@ -1,0 +1,79 @@
+# Initial applicant profile, imported into the database on first run and then
+# edited from the dashboard (Profile & Onboarding). Fields set to null are
+# collected during onboarding. Values here are facts used verbatim in
+# applications; never put anything here that is not true.
+identity:
+  first_name: Viet Anh
+  last_name: Nguyen
+  preferred_name: Viet Anh
+  pronouns: null
+
+contact:
+  email: applicant@example.com
+  phone: (555) 010-0100       # stored encrypted when HUNT_SECRET_KEY is set
+  linkedin_url: https://www.linkedin.com/in/viet-anh-nguyen-898238343
+  github_url: null
+  portfolio_url: null
+  address_line1: null          # encrypted
+  city: null
+  state: null
+  postal_code: null
+  country: United States
+
+education:
+  current_school: University of Wisconsin–Madison
+  current_degree: Master of Science in Data Science
+  current_major: Data Science
+  degree_level: Master's
+  expected_graduation: December 2027
+  expected_graduation_date: 2027-12-15
+  current_gpa: null            # UW–Madison GPA, if you want it shared
+  undergrad_school: University of Oklahoma
+  undergrad_degree: Bachelor of Science in Computer Science
+  undergrad_gpa: "3.85"
+  undergrad_graduation: May 2026
+
+work_authorization:
+  visa_status: F-1
+  us_citizen: false
+  permanent_resident: false
+  authorized_to_work_us: true            # via CPT / OPT
+  requires_sponsorship_now_or_future: true
+  cpt_eligible: true
+  opt_eligible: true
+  will_use_opt: true
+  security_clearance: false
+  # Must be confirmed in the dashboard before any automatic submission.
+  confirmed: false
+
+availability:
+  internship_term: Summer 2027
+  earliest_start_date: 2027-05-30
+  latest_end_date: null
+  willing_to_relocate: true
+  preferred_locations: [Madison, WI, Chicago, IL, Oklahoma City, OK, Dallas, TX]
+  open_to_remote: true
+
+preferences:
+  how_did_you_hear: Online job board
+  min_hourly_rate: null
+
+# Additional skills you genuinely have that are not on the master resume.
+# Tailoring may use these (they are treated as verified because you entered them).
+confirmed_extra_skills: []
+
+# Self-identification (EEO) questions are voluntary. Policy options:
+#   ask      - stop and ask you whenever a required EEO question appears
+#   decline  - answer "I don't wish to answer" / "Decline to self-identify"
+eeo:
+  policy: ask
+  gender: null
+  race_ethnicity: null
+  hispanic_latino: null
+  veteran_status: null
+  disability_status: null
+
+attestations:
+  is_over_18: null              # confirm in onboarding
+  has_relatives_at_employer: null
+  subject_to_noncompete: null

@@ -1,0 +1,75 @@
+# Runs the pipeline every day at 09:00 America/Chicago on GitHub's servers, so your
+# computer does not need to be on. GitHub cron is UTC and has no DST support, so it
+# fires at both 14:00 and 15:00 UTC and `hunt run --scheduled` exits unless it is
+# the 9 o'clock hour in Chicago. The database lock prevents overlapping runs.
+#
+# Required repository secrets:
+#   DATABASE_URL       postgresql+psycopg://user:pass@host/db   (e.g. a free Neon/Supabase Postgres)
+#   HUNT_SECRET_KEY    output of `python -m hunt keygen` (encrypts sensitive profile fields)
+# Optional secrets:
+#   ANTHROPIC_API_KEY  enables Claude-based rewording / cover letters / open-ended answers
+#   HUNT_IMAP_USER, HUNT_IMAP_PASSWORD   Gmail address + app password for inbox monitoring
+#   HUNT_SMTP_USER, HUNT_SMTP_PASSWORD, HUNT_NOTIFY_EMAIL   daily report + blocked-application alerts
+# Optional repository variables:
+#   HUNT_ENABLE_SCHEDULE = true          (turns on the daily schedule)
+#   HUNT_ALLOW_REAL_SUBMISSIONS = true   (leave unset to only prepare applications)
+name: Daily internship hunt
+
+on:
+  schedule:
+    - cron: "0 14 * * *"
+    - cron: "0 15 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run (never contacts employers)"
+        type: boolean
+        default: true
+
+concurrency:
+  group: internship-hunt
+  cancel-in-progress: false
+
+jobs:
+  run:
+    # Scheduled runs are opt-in (repo variable HUNT_ENABLE_SCHEDULE=true); manual runs always work
+    if: github.event_name == 'workflow_dispatch' || vars.HUNT_ENABLE_SCHEDULE == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install
+        run: |
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+      - name: Run pipeline
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          HUNT_SECRET_KEY: ${{ secrets.HUNT_SECRET_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          HUNT_IMAP_USER: ${{ secrets.HUNT_IMAP_USER }}
+          HUNT_IMAP_PASSWORD: ${{ secrets.HUNT_IMAP_PASSWORD }}
+          HUNT_SMTP_USER: ${{ secrets.HUNT_SMTP_USER }}
+          HUNT_SMTP_PASSWORD: ${{ secrets.HUNT_SMTP_PASSWORD }}
+          HUNT_NOTIFY_EMAIL: ${{ secrets.HUNT_NOTIFY_EMAIL }}
+          HUNT_ALLOW_REAL_SUBMISSIONS: ${{ vars.HUNT_ALLOW_REAL_SUBMISSIONS || 'false' }}
+          HUNT_SCHEDULER_ENABLED: "false"
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            if [ "${{ inputs.dry_run }}" = "true" ]; then python -m hunt run --dry-run --max-minutes 60;
+            else python -m hunt run --max-minutes 60; fi
+          else
+            python -m hunt run --scheduled --max-minutes 60
+          fi
+      - name: Keep generated files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hunt-output-${{ github.run_id }}
+          path: data/applications
+          retention-days: 30
+          if-no-files-found: ignore

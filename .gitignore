@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+data/
+!data/.gitkeep
+frontend/node_modules/
+frontend/dist/
+.pytest_cache/
+*.log
+samples/
+config/*.local.yaml
+.claude/
+*.db
+*.db-shm
+*.db-wal
